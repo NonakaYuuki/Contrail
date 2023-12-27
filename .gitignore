@@ -1,0 +1,7 @@
+*.bin
+*.nc
+*.png
+*.mp4
+*.numbers
+*.csv
+.DS_Store
