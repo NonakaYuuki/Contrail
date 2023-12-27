@@ -6,7 +6,7 @@ Download MSM data using the following command:\
 $ ```python data/MSM_download.py```
 
 Download ClimCORE data from the following URL into ```./data/ClimCORE```:\
-http://www.atmos.rcast.u-tokyo.ac.jp/miyasaka/data/eriitoh_20230927.jBPbpdXGdUjQ/
+http://www*************************/
 
 ### 2. Visualization of Contrail Formation Areas
 $ ```python3 src/main.py ```
