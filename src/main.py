@@ -31,9 +31,11 @@ class Contrail_in_Japan:
                 self.hour_list.append(hour)
         self.df_temperature_list = []
         self.df_humidity_list = []
+        self.date_hour_list = []
         for date in self.date_list:
             for hour in self.hour_list:
-                print(date)
+                self.date_hour_list.append(str(date) + str(hour))
+                print(str(date) + str(hour))
                 rf  =  "./data/MSM/"+'{0}/'.format(date)+ "Z__C_RJTD_{0}{1}0000_MSM_GPV_Rjp_L-pall_FH00-15_grib2.bin".format(date, hour)
                 msm = GetMSMPall(rf, self.min_lat, self.max_lat, self.min_lon, self.max_lon, self.min_altitude, self.max_altitude) 
                 self.df_temperature_list.append(msm.MSM_Pall_kelvin_table_create(0))
@@ -118,11 +120,12 @@ class Contrail_in_Japan:
                                 'center': {'lat': lat_center, 
                                 'lon': long_center},
                                 'zoom': 4})
+            print('vis_contrail_MSM', self.date_hour_list[k])
             fig.show()
             # fig.write_image('./result/{0}_{1}h_{2}ft.png'.format(self.date_list, self.hour_list, altitude))
         
     def vis_contrail_CLimCORE(self, altitude):
-        for ds_temperature, ds_humidity in zip(self.ds_temperature_list, self.ds_humidity_list):
+        for index, (ds_temperature, ds_humidity) in enumerate(zip(self.ds_temperature_list, self.ds_humidity_list)):
             lat_list = []
             lon_list = []
             for lat in [i / 10 for i in range(int(self.min_lat*10),int((self.max_lat)*10+1),1)]:
@@ -131,13 +134,10 @@ class Contrail_in_Japan:
                     T = float(ds_temperature.sel(lat = lat,
                                                     lon = lon,
                                                     alt = altitude))
-                    print(lat,lon)
-                    print(T)
                 
                     RHi = float(ds_humidity.sel(lat = lat,
                                                     lon = lon,
                                                     alt = altitude))
-                    print(RHi)
 
                     if T <= 233.15 and RHi >= 100:
                         lat_list.append(lat)
@@ -162,6 +162,7 @@ class Contrail_in_Japan:
                                 'center': {'lat': lat_center, 
                                 'lon': long_center},
                                 'zoom': 4})
+            print('vis_contrail_ClimCORE', self.date_hour_list[index])
             fig.show()
             # fig.write_image('./result/{0}_{1}h_{2}ft.png'.format(self.date_list, self.hour_list, altitude))
     
@@ -268,6 +269,6 @@ if __name__ == '__main__':
                                  127,
                                  47,
                                  147)
-    for alt in [30000]:
-        contrail.vis_contrail_MSM(alt)
+    for alt in [38000]:
+        # contrail.vis_contrail_MSM(alt)
         contrail.vis_contrail_CLimCORE(alt)
