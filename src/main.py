@@ -269,6 +269,6 @@ if __name__ == '__main__':
                                  127,
                                  47,
                                  147)
-    for alt in [38000]:
-        # contrail.vis_contrail_MSM(alt)
+    for alt in [30000]:
+        contrail.vis_contrail_MSM(alt)
         contrail.vis_contrail_CLimCORE(alt)
