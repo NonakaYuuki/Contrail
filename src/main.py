@@ -86,9 +86,9 @@ class Contrail_in_Japan:
         return RHw * ew / ei
     
     def vis_contrail_MSM(self, altitude):
-        lat_list = []
-        lon_list = []
         for k in range(len(self.df_temperature_list)):
+            lat_list = []
+            lon_list = []
             for lat in [i / 10 for i in range(int(self.min_lat*10),int((self.max_lat)*10+1),1)]:
                 for lon in [i / 1000 for i in range(int(self.min_lon*1000),int((self.max_lon)*1000+1),125)]:
                     df_point = self.df_temperature_list[k][(self.df_temperature_list[k]["Lat"] == lat) & (self.df_temperature_list[k]['Lon'] == lon)] 

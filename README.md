@@ -1,88 +1,85 @@
 # contrail
 
-## 飛行機雲形成エリアの可視化方法
-### 1.　気象データのダウンロード
-以下のコマンドでMSMデータをダウンロードする。\
+## Visualization Method of Contrail Formation Areas
+### 1. Downloading Meteorological Data
+Download MSM data using the following command:\
 $ ```python data/MSM_download.py```
 
-以下のURLからClimCOREデータを```./data/ClimCORE```にダウンロードする。\
+Download ClimCORE data from the following URL into ```./data/ClimCORE```:\
 http://www.atmos.rcast.u-tokyo.ac.jp/miyasaka/data/eriitoh_20230927.jBPbpdXGdUjQ/
 
-### 2.　飛行機雲形成エリアの可視化
+### 2. Visualization of Contrail Formation Areas
 $ ```python3 src/main.py ```
 
-<br>
-
-## ./src/main.py
-飛行データ（CARATSオープンデータ or OpenSkyデータ）と気象データ（MSMデータ or ClimCOREデータ）を用いて、飛行機雲を発生させるフライトの数を計算する。また、飛行機雲が発生しうる空域の可視化も行う。\
-
-```Contrail_in_Japan```クラスの入力は、分析したい日時・緯度経度の範囲である。
-
-### ```vis_contrail_MSM()```
-MSMデータを使って、飛行機雲が発生しうる空域を可視化する。
-
-### ```vis_contrail_ClimCORE()```
-ClimCOREデータを使って、飛行機雲が発生しうる空域を可視化する。
-
-### ```count_flight()```
-飛行機雲を発生させうるフライトがいくつあるかを数える。
-
-
-<br>
-
-## ./src/ClimCORE.py
-ClimCOREクラスに年・月・日・時・緯度（度）・経度（度）・気圧高度（feet）を引数として入力する。\
-そして、下記の関数を実行することによって、入力した日時、場所の気象データを出力として得ることができる。\
-ちなみに出力はxarray.datasetの型で出力される。\
-
-### ```Pressure（）```
-気圧を出力する関数。（hPa）
-
-### ```RHi（）```
-氷に対する相対湿度を出力する関数。（％）
-
-### ```Temperature（）```
-温度を出力する関数。（K）
-
-### ```U_Wind（）```
-東西方向の風速を出力する関数。西風が正。（m/s）
-
-### ```V_Wind（）```
-南北方向の風速を出力する関数。南風が正。（m/s）
-
-<br>
-
-## ※　xesmfのインストール＆importに手こずった時
-xesmf_envという名前の仮想環境をcondaによって作成する。\
+### ※ Troubleshooting xesmf Installation & Import
+Create a virtual environment named xesmf_env using conda:\
 $ ```conda create -n xesmf_env```
 
-xesmf_env仮想環境に入る。\
+Activate the xesmf_env virtual environment:\
 $ ```conda activate xesmf_env```
 
-xesmfをインストール\
+Install xesmf:\
 $ ```conda install -c conda-forge xesmf```\
 $ ```conda install -c conda-forge dask netCDF4```
 
 <br>
+------------------------- Description of Each File -------------------------
+
+## ./src/main.py
+Using flight data (CARATS open data or OpenSky data) and meteorological data (MSM data or ClimCORE data), calculate the number of flights generating contrails and visualize the potential contrail formation areas.
+
+Input for the ```Contrail_in_Japan``` class includes the date and latitude-longitude range for analysis.
+
+### ```vis_contrail_MSM()```
+Visualize areas where contrails can form using MSM data.
+
+### ```vis_contrail_ClimCORE()```
+Visualize areas where contrails can form using ClimCORE data.
+
+### ```count_flight()```
+Count the number of flights that can potentially generate contrails.
+
+<br>
+
+## ./src/ClimCORE.py
+Input the year, month, day, hour, latitude (degrees), longitude (degrees), and pressure altitude (feet) into the ClimCORE class. Execute the functions below to obtain meteorological data for the specified date, time, and location. The output is in the form of xarray.dataset.
+
+### ```Pressure()```
+Function to output pressure (hPa).
+
+### ```RHi()```
+Function to output relative humidity to ice (%).
+
+### ```Temperature()```
+Function to output temperature (K).
+
+### ```U_Wind()```
+Function to output east-west wind speed. Westerly wind is positive (m/s).
+
+### ```V_Wind()```
+Function to output north-south wind speed. Southerly wind is positive (m/s).
+
+<br>
 
 ## ./src/CARATS.py
-```path```にCARATSオープンデータ（CSVファイル）へのパスを入力する。
+Input the path to CARATS open data (CSV file) into the ```path```.
 ### ```cover_path()```
-ある点からある点への飛行経路の間を補完する関数。点と点の間が約0.1度になるように補完される。
+Function to interpolate flight routes between two points. Interpolation is done to achieve approximately 0.1 degrees between points.
 
 ### ```rmk_flight_data()```
-上記の関数で補完されたフライトデータを返す。
+Return flight data interpolated by the above function.
 
 ### ```vis_path()```
-CARATSオープンデータのフライトデータを可視化する。
+Visualize flight data from CARATS open data.
 
 <br>
 
 ## ./src/vapor_pressure_graph.py
-これまでに論文で提案された水の飽和蒸気圧曲線と氷の飽和蒸気圧曲線をグラフにした。\
-これらの式は水に対する相対湿度から氷に対する相対湿度への変換に使われる。
+Graphs of the proposed saturation vapor pressure curves for water and ice in previous papers. These formulas are used to convert relative humidity from water to relative humidity to ice.
 
 <br>
 
 ## ./src/vertical_profile.py
-関数```vis_profile(date, hour, lat, lon)```に日時・経度緯度を入力すると、その地点での温度、氷に対する相対湿度の鉛直プロファイルが可視化される。
+The function ```vis_profile(date, hour, lat, lon)``` visualizes vertical profiles of temperature and relative humidity to ice at a given date and location.
+
+The above is an explanation of the files in Japanese. Please let me know if you have any questions or need further clarification.
