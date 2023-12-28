@@ -10,6 +10,58 @@ class Vapor_pressure:
         self.T_list = [t for t in range(self.Tmin, self.Tmax+1, 1)]
         self.T_list_c = [t for t in range(Tmin, Tmax+1, 1)]
 
+    def Ew(self):
+        result = []
+        for T in self.T_list:
+            result.append(np.exp(
+            54.842763
+            - 6763.22 / (T)
+            - 4.210 * np.log(T)
+            + 0.000367 * (T)
+            + np.tanh(0.0415 * (T - 218.8))
+            * (
+                53.878
+                - 1331.22 / (T)
+                - 9.44523 * np.log(T)
+                + 0.014025 * (T)
+            )
+        ) / 100)
+        return result
+    
+    def Ei(self):
+        result = []
+        for T in self.T_list:
+            result.append(np.exp(
+            9.550426
+            - 5723.265 / (T)
+            + 3.53068 * np.log(T)
+            - 0.00728332 * (T)
+        ) / 100)
+        return result
+    
+    def Ei_Ew(self):
+        result = []
+        for T in self.T_list:
+            result.append(- np.exp(
+            9.550426
+            - 5723.265 / (T)
+            + 3.53068 * np.log(T)
+            - 0.00728332 * (T)
+        ) + np.exp(
+            54.842763
+            - 6763.22 / (T)
+            - 4.210 * np.log(T)
+            + 0.000367 * (T)
+            + np.tanh(0.0415 * (T - 218.8))
+            * (
+                53.878
+                - 1331.22 / (T)
+                - 9.44523 * np.log(T)
+                + 0.014025 * (T)
+            )
+        ))
+        return result
+    
     def Goff_Gratch(self):
         Tst = 372.15
         result = []
@@ -70,10 +122,12 @@ class Vapor_pressure:
     
     def vis(self):
         fig, ax = plt.subplots()
-        ax.plot(self.T_list_c, self.Goff_Gratch(), label='Goff Gratch Water', linewidth=3)
+        ax.plot(self.T_list_c, self.Ew(), label='Ew', linewidth=3)
+        ax.plot(self.T_list_c, self.Ei(), label='Ei', linewidth=3)
+        # ax.plot(self.T_list_c, self.Goff_Gratch(), label='Goff Gratch Water', linewidth=3)
         # ax.plot(self.T_list_c, self.WMO(), label='WMO')
         # ax.plot(self.T_list_c, self.Sonntag(), label='Sonntag')
-        ax.plot(self.T_list_c, self.Goff_Gratch_ice(), label='Goff Gratch Ice', linewidth=3)
+        # ax.plot(self.T_list_c, self.Goff_Gratch_ice(), label='Goff Gratch Ice', linewidth=3)
         # ax.plot(self.T_list_c, self.WMO_ice(), label='WMO_Ice')
         # ax.plot(self.T_list_c, self.Malti_ice(), label='Malti_Ice')
         ax.plot(self.T_list_c, self.AEKR_water(), label='AEKR_Water', linewidth=3)
@@ -91,5 +145,5 @@ if __name__ == '__main__':
     # Tst = 372.15
     # T = 300
     # print(10**(-7.90298 * (Tst/T - 1) + 5.02808 * np.log10(Tst/T) - 1.3816 * 10**(-7) * (10**(11.34 * (1 - T/Tst)) - 1) + 8.1328 * 10**(-3) * (10**(-3.49149 * (Tst/T - 1)) - 1) + np.log10(1013.246)))
-    vapor_pressure = Vapor_pressure(-50,0)
+    vapor_pressure = Vapor_pressure(-50,10)
     vapor_pressure.vis()

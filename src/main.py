@@ -48,6 +48,7 @@ class Contrail_in_Japan:
         self.ds_humidity_list = []
         for date in self.date_list:
             for hour in self.hour_list:
+                self.date_hour_list.append(str(date) + str(hour))
                 Climcore = ClimCORE(int(str(date)[:4]),
                                     int(str(date)[4:6]),
                                     int(str(date)[6:]),
@@ -66,23 +67,23 @@ class Contrail_in_Japan:
         # ew = 10**(-7.90298 * (Tst/T - 1) + 5.02808 * np.log10(Tst/T) - 1.3816 * 10**(-7) * (10**(11.34 * (1 - T/Tst)) - 1) + 8.1328 * 10**(-3) * (10**(-3.49149 * (Tst/T - 1)) - 1) + np.log10(1013.246))
         ew = np.exp(
             54.842763
-            - 6763.22 / T + 273.15
-            - 4.210 * np.log(T + 273.15)
-            + 0.000367 * T + 273.15
-            + np.tanh(0.0415 * (T + 273.15 - 218.8))
+            - 6763.22 / (T)
+            - 4.210 * np.log(T)
+            + 0.000367 * (T)
+            + np.tanh(0.0415 * (T - 218.8))
             * (
                 53.878
-                - 1331.22 / T + 273.15
-                - 9.44523 * np.log(T + 273.15)
-                + 0.014025 * T + 273.15
+                - 1331.22 / (T)
+                - 9.44523 * np.log(T)
+                + 0.014025 * (T)
             )
-        )
+        ) / 100
         ei = np.exp(
             9.550426
-            - 5723.265 / T + 273.15
-            + 3.53068 * np.log(T + 273.15)
-            - 0.00728332 * T + 273.15
-        )
+            - 5723.265 / (T)
+            + 3.53068 * np.log(T)
+            - 0.00728332 * (T)
+        ) / 100
         return RHw * ew / ei
     
     def vis_contrail_MSM(self, altitude):
@@ -96,6 +97,9 @@ class Contrail_in_Japan:
                     df_point = self.df_humidity_list[k][(self.df_humidity_list[k]["Lat"] == lat) & (self.df_humidity_list[k]['Lon'] == lon)] 
                     RHw = float(df_point.at[df_point.index[0],str(altitude)])
                     RHi = self.RHw_to_RHi(RHw, T)
+                    # print('T', T)
+                    # print('RHw', RHw)
+                    # print('RHi', RHi)
 
                     if T <= 233.15 and RHi >= 100:
                         lat_list.append(lat)
@@ -270,5 +274,6 @@ if __name__ == '__main__':
                                  47,
                                  147)
     for alt in [30000]:
+        print(alt)
         contrail.vis_contrail_MSM(alt)
         contrail.vis_contrail_CLimCORE(alt)

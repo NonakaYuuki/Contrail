@@ -114,18 +114,20 @@ class ClimCORE:
         T0 = 273.15
         ew = np.exp(
             54.842763
-            - 6763.22 / T + 273.15
-            - 4.210 * np.log(T + 273.15)
-            + 0.000367 * T + 273.15
-            + np.tanh(0.0415 * (T + 273.15 - 218.8))
+            - 6763.22 / (T)
+            - 4.210 * np.log(T)
+            + 0.000367 * (T)
+            + np.tanh(0.0415 * (T - 218.8))
             * (
                 53.878
-                - 1331.22 / T + 273.15
-                - 9.44523 * np.log(T + 273.15)
-                + 0.014025 * T + 273.15
+                - 1331.22 / (T)
+                - 9.44523 * np.log(T)
+                + 0.014025 * (T)
             )
-        )
-        e = P / eps * 1 / (1/Q + (1-eps)/eps)
+        ) / 100
+        gas_constant_water_vapor = 461.51
+        gas_constant_dry_air = 287.05
+        e = P * Q * (gas_constant_water_vapor / gas_constant_dry_air)
         RHw = e / ew
         return RHw
     
@@ -133,23 +135,23 @@ class ClimCORE:
         T0 = 273.15
         ew = np.exp(
             54.842763
-            - 6763.22 / T + 273.15
-            - 4.210 * np.log(T + 273.15)
-            + 0.000367 * T + 273.15
-            + np.tanh(0.0415 * (T + 273.15 - 218.8))
+            - 6763.22 / (T)
+            - 4.210 * np.log(T)
+            + 0.000367 * (T)
+            + np.tanh(0.0415 * (T - 218.8))
             * (
                 53.878
-                - 1331.22 / T + 273.15
-                - 9.44523 * np.log(T + 273.15)
-                + 0.014025 * T + 273.15
+                - 1331.22 / (T)
+                - 9.44523 * np.log(T)
+                + 0.014025 * (T)
             )
-        )
+        ) / 100
         ei = np.exp(
             9.550426
-            - 5723.265 / T + 273.15
-            + 3.53068 * np.log(T + 273.15)
-            - 0.00728332 * T + 273.15
-        )
+            - 5723.265 / (T)
+            + 3.53068 * np.log(T)
+            - 0.00728332 * (T)
+        ) / 100
         return RHw * ew / ei
     
     def RHw(self):
@@ -213,6 +215,9 @@ class ClimCORE:
                     data_out_T = fit_T(alt) # 抽出データ
                     data_out_RHw = self.convert_Q_to_RHw(data_out_QVa, data_out_P, data_out_T)
                     data_out = self.convert_RHw_to_RHi(data_out_RHw, data_out_T)
+                    # print('T', data_out_T)
+                    # print('RHw', data_out_RHw * 100)
+                    # print('RHi', data_out * 100)
                     data_list_by_changing_alt.append(data_out * 100)
                 data_list_by_changing_lon.append(data_list_by_changing_alt)
             data_array.append(data_list_by_changing_lon)
