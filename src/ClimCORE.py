@@ -109,7 +109,8 @@ class ClimCORE:
                                                   "alt" : self.alt_list_orig})
         return result
     
-    def convert_Q_to_RHw(self, Q, P, T):
+    def convert_Q_to_RHw(self, QVa, QCa, QIa, QRa, QSa, QGa, P, T):
+        Q = QVa / (1 - QCa - QIa - QRa - QSa - QGa)
         eps = 0.622
         T0 = 273.15
         ew = np.exp(
@@ -125,9 +126,7 @@ class ClimCORE:
                 + 0.014025 * (T)
             )
         ) / 100
-        gas_constant_water_vapor = 461.51
-        gas_constant_dry_air = 287.05
-        e = P * Q * (gas_constant_water_vapor / gas_constant_dry_air)
+        e = P / eps * 1 / (1/Q + (1-eps)/eps)
         RHw = e / ew
         return RHw
     
@@ -191,9 +190,19 @@ class ClimCORE:
     def RHi(self):
         # モデル面物理量
         ds_QVa = xr.open_dataset('./data/ClimCORE/fcst_mdl.Ges/QVa/{0}/QVa.{1}.nc'.format(self.date[:-6], self.date))
+        ds_QCa = xr.open_dataset('./data/ClimCORE/fcst_mdl.Ges/QCa/{0}/QCa.{1}.nc'.format(self.date[:-6], self.date))
+        ds_QIa = xr.open_dataset('./data/ClimCORE/fcst_mdl.Ges/QIa/{0}/QIa.{1}.nc'.format(self.date[:-6], self.date))
+        ds_QRa = xr.open_dataset('./data/ClimCORE/fcst_mdl.Ges/QRa/{0}/QRa.{1}.nc'.format(self.date[:-6], self.date))
+        ds_QSa = xr.open_dataset('./data/ClimCORE/fcst_mdl.Ges/QSa/{0}/QSa.{1}.nc'.format(self.date[:-6], self.date))
+        ds_QGa = xr.open_dataset('./data/ClimCORE/fcst_mdl.Ges/QGa/{0}/QGa.{1}.nc'.format(self.date[:-6], self.date))
         ds_P = xr.open_dataset('./data/ClimCORE/fcst_mdl.Ges/P/{0}/P.{1}.nc'.format(self.date[:-6], self.date))
         ds_T = xr.open_dataset('./data/ClimCORE/fcst_mdl.Ges/T/{0}/T.{1}.nc'.format(self.date[:-6], self.date))
         QVa_regrid = self.regridder(ds_QVa['QVa'].data)
+        QCa_regrid = self.regridder(ds_QCa['QCa'].data)
+        QIa_regrid = self.regridder(ds_QIa['QIa'].data)
+        QRa_regrid = self.regridder(ds_QRa['QRa'].data)
+        QSa_regrid = self.regridder(ds_QSa['QSa'].data)
+        QGa_regrid = self.regridder(ds_QGa['QGa'].data)
         P_regrid = self.regridder(ds_P['P'].data)
         T_regrid = self.regridder(ds_T['T'].data)
 
@@ -204,16 +213,31 @@ class ClimCORE:
                 data_list_by_changing_alt = []
                 z = self.alt_matrix[self.size[0] - i - 1][j]
                 QVa = QVa_regrid[0][:,self.size[0] - i - 1,j]
+                QCa = QCa_regrid[0][:,self.size[0] - i - 1,j]
+                QIa = QIa_regrid[0][:,self.size[0] - i - 1,j]
+                QRa = QRa_regrid[0][:,self.size[0] - i - 1,j]
+                QSa = QSa_regrid[0][:,self.size[0] - i - 1,j]
+                QGa = QGa_regrid[0][:,self.size[0] - i - 1,j]
                 P = P_regrid[0][:,self.size[0] - i - 1,j]
                 T = T_regrid[0][:,self.size[0] - i - 1,j]
                 fit_QVa = interpolate.interp1d(z, QVa, kind='cubic') # 3次スプラインフィッティング
+                fit_QCa = interpolate.interp1d(z, QCa, kind='cubic') # 3次スプラインフィッティング
+                fit_QIa = interpolate.interp1d(z, QIa, kind='cubic') # 3次スプラインフィッティング
+                fit_QRa = interpolate.interp1d(z, QRa, kind='cubic') # 3次スプラインフィッティング
+                fit_QSa = interpolate.interp1d(z, QSa, kind='cubic') # 3次スプラインフィッティング
+                fit_QGa = interpolate.interp1d(z, QGa, kind='cubic') # 3次スプラインフィッティング
                 fit_P = interpolate.interp1d(z, P, kind='cubic') # 3次スプラインフィッティング
                 fit_T = interpolate.interp1d(z, T, kind='cubic') # 3次スプラインフィッティング
                 for alt in self.alt_list:
                     data_out_QVa = fit_QVa(alt) # 抽出データ
+                    data_out_QCa = fit_QCa(alt) # 抽出データ
+                    data_out_QIa = fit_QIa(alt) # 抽出データ
+                    data_out_QRa = fit_QRa(alt) # 抽出データ
+                    data_out_QSa = fit_QSa(alt) # 抽出データ
+                    data_out_QGa = fit_QGa(alt) # 抽出データ
                     data_out_P = fit_P(alt) # 抽出データ
                     data_out_T = fit_T(alt) # 抽出データ
-                    data_out_RHw = self.convert_Q_to_RHw(data_out_QVa, data_out_P, data_out_T)
+                    data_out_RHw = self.convert_Q_to_RHw(data_out_QVa, data_out_QCa, data_out_QIa, data_out_QRa, data_out_QSa, data_out_QGa, data_out_P, data_out_T)
                     data_out = self.convert_RHw_to_RHi(data_out_RHw, data_out_T)
                     # print('T', data_out_T)
                     # print('RHw', data_out_RHw * 100)

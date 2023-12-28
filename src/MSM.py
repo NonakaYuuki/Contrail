@@ -149,28 +149,40 @@ class GetMSMPall:
     
         rh_1000hPa = grbs.select(parameterName='Geopotential height', level=1000, forecastTime=tm)[0]
         values1000g, lats, lons = rh_1000hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values1000g.fill(4.43308*10**4 * (1 - (1000/1013.25)**0.190263) / 0.3048)
         rh_925hPa = grbs.select(parameterName='Geopotential height', level=925, forecastTime=tm)[0]
         values925g, lats, lons = rh_925hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values925g.fill(4.43308*10**4 * (1 - (925/1013.25)**0.190263) / 0.3048)
         rh_850hPa = grbs.select(parameterName='Geopotential height', level=850, forecastTime=tm)[0]
         values850g, lats, lons = rh_850hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values850g.fill(4.43308*10**4 * (1 - (850/1013.25)**0.190263) / 0.3048)
         rh_700hPa = grbs.select(parameterName='Geopotential height', level=700, forecastTime=tm)[0]
         values700g, lats, lons = rh_700hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values700g.fill(4.43308*10**4 * (1 - (700/1013.25)**0.190263) / 0.3048)
         rh_600hPa = grbs.select(parameterName='Geopotential height', level=600, forecastTime=tm)[0]
         values600g, lats, lons = rh_600hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values600g.fill(4.43308*10**4 * (1 - (600/1013.25)**0.190263) / 0.3048)
         rh_500hPa = grbs.select(parameterName='Geopotential height', level=500, forecastTime=tm)[0]
         values500g, lats, lons = rh_500hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values500g.fill(4.43308*10**4 * (1 - (500/1013.25)**0.190263) / 0.3048)
         rh_400hPa = grbs.select(parameterName='Geopotential height', level=400, forecastTime=tm)[0]
         values400g, lats, lons = rh_400hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values400g.fill(4.43308*10**4 * (1 - (400/1013.25)**0.190263) / 0.3048)
         rh_300hPa = grbs.select(parameterName='Geopotential height', level=300, forecastTime=tm)[0]
         values300g, lats, lons = rh_300hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values300g.fill(4.43308*10**4 * (1 - (300/1013.25)**0.190263) / 0.3048)
         rh_250hPa = grbs.select(parameterName='Geopotential height', level=250, forecastTime=tm)[0]
         values250g, lats, lons = rh_250hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values250g.fill(4.43308*10**4 * (1 - (250/1013.25)**0.190263) / 0.3048)
         rh_200hPa = grbs.select(parameterName='Geopotential height', level=200, forecastTime=tm)[0]
-        values200gt, lats, lons = rh_200hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values200g, lats, lons = rh_200hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values200g.fill(4.43308*10**4 * (1 - (200/1013.25)**0.190263) / 0.3048)
         rh_150hPa = grbs.select(parameterName='Geopotential height', level=150, forecastTime=tm)[0]
         values150g, lats, lons = rh_150hPa.data(self.lat0-0.1, self.lat1, self.lon0,self. lon1)
+        values150g.fill(4.43308*10**4 * (1 - (150/1013.25)**0.190263) / 0.3048)
         rh_100hPa = grbs.select(parameterName='Geopotential height', level=100, forecastTime=tm)[0]
         values100g, lats, lons = rh_100hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values100g.fill(4.43308*10**4 * (1 - (100/1013.25)**0.190263) / 0.3048)
 
 
         self.Geopotential = np.concatenate([[values1000g],[values925g],[values850g],[values700g],[values600g],[values500g],[values400g],[values300g],[values250g],[values200t],[values150g],[values100g]], axis=0)
@@ -323,20 +335,28 @@ class GetMSMPall:
     
         rh_1000hPa = grbs.select(parameterName='Geopotential height', level=1000, forecastTime=tm)[0]
         values1000g, lats, lons = rh_1000hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values1000g.fill(4.43308*10**4 * (1 - (1000/1013.25)**0.190263) / 0.3048)
         rh_925hPa = grbs.select(parameterName='Geopotential height', level=925, forecastTime=tm)[0]
         values925g, lats, lons = rh_925hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values925g.fill(4.43308*10**4 * (1 - (925/1013.25)**0.190263) / 0.3048)
         rh_850hPa = grbs.select(parameterName='Geopotential height', level=850, forecastTime=tm)[0]
         values850g, lats, lons = rh_850hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values850g.fill(4.43308*10**4 * (1 - (850/1013.25)**0.190263) / 0.3048)
         rh_700hPa = grbs.select(parameterName='Geopotential height', level=700, forecastTime=tm)[0]
         values700g, lats, lons = rh_700hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values700g.fill(4.43308*10**4 * (1 - (700/1013.25)**0.190263) / 0.3048)
         rh_600hPa = grbs.select(parameterName='Geopotential height', level=600, forecastTime=tm)[0]
         values600g, lats, lons = rh_600hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values600g.fill(4.43308*10**4 * (1 - (600/1013.25)**0.190263) / 0.3048)
         rh_500hPa = grbs.select(parameterName='Geopotential height', level=500, forecastTime=tm)[0]
         values500g, lats, lons = rh_500hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values500g.fill(4.43308*10**4 * (1 - (500/1013.25)**0.190263) / 0.3048)
         rh_400hPa = grbs.select(parameterName='Geopotential height', level=400, forecastTime=tm)[0]
         values400g, lats, lons = rh_400hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values400g.fill(4.43308*10**4 * (1 - (400/1013.25)**0.190263) / 0.3048)
         rh_300hPa = grbs.select(parameterName='Geopotential height', level=300, forecastTime=tm)[0]
         values300g, lats, lons = rh_300hPa.data(self.lat0-0.1, self.lat1, self.lon0, self.lon1)
+        values300g.fill(4.43308*10**4 * (1 - (300/1013.25)**0.190263) / 0.3048)
 
 
         self.Geopotential = np.concatenate([[values1000g],[values925g],[values850g],[values700g],[values600g],[values500g],[values400g],[values300g]], axis=0)
@@ -396,7 +416,7 @@ class GetMSMPall:
 
 def hokan_kelvin(self,alt,i,k):
 
-    hgt = float(alt) * 0.3048   #ft → m
+    hgt = float(alt)
     
     for h in range(0,13):
      
@@ -460,7 +480,7 @@ def hokan_wind(self,alt,i,k):
 
 def hokan_humidity(self,alt,i,k):
 
-    hgt = float(alt) * 0.3048   #ft → m
+    hgt = float(alt)
     
     for h in range(0,8):
      
